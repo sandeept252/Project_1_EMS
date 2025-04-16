@@ -28,14 +28,44 @@ performance_scores = {}
 pensions = {}
 
 # Module 1: Employee Database -- create and update
-def add_employee(emp_id, name, age, department, join_date, status):
+def add_employee():
+    print("Adding new employee...\n")
+    emp_id = input("Employee ID: ")
+    name = input("Name: ")
+    department = input("Department: ")
+    dob = input("Date of Birth (YYYY-MM-DD): ")
+    join_date = input("Join Date (YYYY-MM-DD): ")
     employees[emp_id] = {
         "name": name,
-        "age": age,
+        "date_of_birth": dob,
         "department": department,
         "join_date": join_date,
-        "status": "working"    # "working", "retired", "resigned" or "deceased" with "working" default
+        "status": "working",    # "working", "retired", "resigned" or "deceased" with "working" default
+        "exit_date": None,      # Exit Date is None by default
+        "exit_reason": None     # Exit Reason is None by default
     }
+    print(f"Employee {emp_id} successfully added!")
+
+# def update_employee():
+
+def view_employee():
+    emp_id = input("Enter Employee ID to view: ")
+    if emp_id in employees:
+        emp = employees[emp_id]
+        print("\n=== Employee Details ===")
+        for key, value in emp.items():
+            print(f"{key}: {value}")
+    else:
+        print("Employee not found.")
+
+def view_all_employees():
+    if not employees:
+        print("No employee records available.")
+        return
+    print("\n=== All Employees ===\n")
+    print(f"{'ID':<8} {'Name':<15} {'Dept':<12} {'Status':<12}")
+    for emp_id, emp in employees.items():
+        print(f"{emp_id:<8} {emp['name']:<15} {emp['department']:<12} {emp['status']:<12}")
 
 #def retire_employee(emp_id):
     #if emp_id in employees:
@@ -57,26 +87,26 @@ while True:
         6. Exit
     ''')
 
-    choice = input("Enter your choice: ")
+    choice = int(input("Enter the Menu of your choice: "))
 
     if choice == 1:
         add_employee()
 
-    elif choice == 2:
-        update_employee()
+    # elif choice == 2:
+    #     update_employee()
 
     elif choice == 3:
-        view_employee()
+         view_employee()
 
     elif choice == 4:
         view_all_employees()
 
-    elif choice == 5:
-        save_to_database()
+    # elif choice == 5:
+    #     save_to_database()
 
     elif choice == 6:
-        print("Exiting... Thank you for using our EMS.")
+        print("Exiting...\n Thank you for using our EMS.")
         break
 
     else:
-        print("Invalid Choice. Try Again!")
+        print("Invalid Choice. Try Again!\n")
