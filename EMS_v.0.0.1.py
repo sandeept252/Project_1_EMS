@@ -18,6 +18,9 @@ This version can be used to create, store, and update employee database.
 6. *User* information can be accessed and updated by *Super User*.
 7. *User* and *Super User* are managed by *Admin*
 ''' 
+import os
+import pandas as pd
+from datetime import datetime
 
 # Data
 employees = {}
@@ -28,6 +31,21 @@ performance_scores = {}
 pensions = {}
 
 # Module 1: Employee Database -- create and update
+def save_employee_data_to_excel(data, file_name="employees.xlsx"):
+    folder_path = input("Folder to save the file: ")
+
+    os.makedirs(folder_path, exist_ok=True)
+    
+    df = pd.DataFrame(data)
+
+    file_path = os.path.join(folder_path, file_name)
+
+    df.to_excel(file_path, index = False)
+
+    print(f"File saved successfully at: {file_path}")
+    
+    return file_path
+
 def add_employee():
     print("Adding new employee...\n")
     emp_id = input("Employee ID: ")
@@ -36,15 +54,16 @@ def add_employee():
     dob = input("Date of Birth (YYYY-MM-DD): ")
     join_date = input("Join Date (YYYY-MM-DD): ")
     employees[emp_id] = {
-        "name": name,
-        "date_of_birth": dob,
-        "department": department,
-        "join_date": join_date,
-        "status": "working",    # "working", "retired", "resigned" or "deceased" with "working" default
-        "exit_date": None,      # Exit Date is None by default
-        "exit_reason": None     # Exit Reason is None by default
-    }
-    print(f"Employee {emp_id} successfully added!")
+            "name": name,
+            "date_of_birth": dob,
+            "department": department,
+            "join_date": join_date,
+            "status": "working",    # "working", "retired", "resigned" or "deceased" with "working" default
+            "exit_date": None,      # Exit Date is None by default
+            "exit_reason": None     # Exit Reason is None by default
+        }
+    
+    print(f"Employee {emp_id} successfully added!\n")
 
 # def update_employee():
 
@@ -101,8 +120,8 @@ while True:
     elif choice == 4:
         view_all_employees()
 
-    # elif choice == 5:
-    #     save_to_database()
+    elif choice == 5:
+        save_employee_data_to_excel(employees)
 
     elif choice == 6:
         print("Exiting...\n Thank you for using our EMS.")
