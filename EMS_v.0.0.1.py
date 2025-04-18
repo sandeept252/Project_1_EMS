@@ -45,7 +45,7 @@ def load_employee_data_from_excel():
     
     if not os.path.exists(file_path):
         print("File not found. Starting fresh.\n")
-
+        return
 
     df = pd.read_excel(file_path)
     for _, row in df.iterrows():
