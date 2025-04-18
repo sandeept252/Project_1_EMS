@@ -31,20 +31,29 @@ performance_scores = {}
 pensions = {}
 
 # Module 1: Employee Database -- create and update
-def save_employee_data_to_excel(data, file_name="employees.xlsx"):
+def save_employee_data_to_excel():
     folder_path = input("Folder to save the file: ")
 
     os.makedirs(folder_path, exist_ok=True)
     
-    df = pd.DataFrame(data)
+    df = pd.DataFrame(employees)
+
+    file_name="employees.xlsx"
 
     file_path = os.path.join(folder_path, file_name)
+    
+    data = []
+    for emp_id, emp in employees.items():
+        record = {employees}
+        data.append(record)
 
-    df.to_excel(file_path, index = False)
+    # Create a DataFrame from selected fields
+    df = pd.DataFrame(data, columns=["ID", "Name", "Dept", "Status"])
+
+
+    df.to_excel(file_path)
 
     print(f"File saved successfully at: {file_path}")
-    
-    return file_path
 
 def add_employee():
     print("Adding new employee...\n")
@@ -53,15 +62,15 @@ def add_employee():
     department = input("Department: ")
     dob = input("Date of Birth (YYYY-MM-DD): ")
     join_date = input("Join Date (YYYY-MM-DD): ")
-    employees[emp_id] = {
-            "name": name,
-            "date_of_birth": dob,
-            "department": department,
-            "join_date": join_date,
-            "status": "working",    # "working", "retired", "resigned" or "deceased" with "working" default
-            "exit_date": None,      # Exit Date is None by default
-            "exit_reason": None     # Exit Reason is None by default
-        }
+    employees[emp_id] = {"emp_id": emp_id, 
+                         "name": name, 
+                         "date_of_birth": dob, 
+                         "department": department, 
+                         "join_date": join_date, 
+                         "status": "working", 
+                         "exit_date": None, 
+                         "exit_reason": None
+                         }
     
     print(f"Employee {emp_id} successfully added!\n")
 
@@ -121,7 +130,7 @@ while True:
         view_all_employees()
 
     elif choice == 5:
-        save_employee_data_to_excel(employees)
+        save_employee_data_to_excel()
 
     elif choice == 6:
         print("Exiting...\n Thank you for using our EMS.")
