@@ -103,8 +103,8 @@ def add_employee():
                          "department": department, 
                          "join_date": join_date, 
                          "status": "working", 
-                         "exit_date": None, 
-                         "exit_reason": None
+                         "exit_date": "None", 
+                         "exit_reason": "None"
                          }
     
     print(f"Employee {emp_id} successfully added!\n")
@@ -134,30 +134,57 @@ def update_employee():
     print("7. Exit Reason")
     print("8. Cancel")
 
-    choice = input("Enter your choice: ")
+    update_choice = input("Enter your choice: ")
 
-    if choice == "1":
-        emp["name"] = input("Enter new name: ")
-    elif choice == "2":
-        emp["department"] = input("Enter new department: ")
-    elif choice == "3":
-        emp["date_of_birth"] = input("Enter new date of birth (YYYY-MM-DD): ")
-    elif choice == "4":
-        emp["join_date"] = input("Enter new join date (YYYY-MM-DD): ")
-    elif choice == "5":
-        emp["status"] = input("Enter new status (working/retired): ")
-    elif choice == "6":
-        emp["exit_date"] = input("Enter new exit date (YYYY-MM-DD): ")
-    elif choice == "7":
-        emp["exit_reason"] = input("Enter new exit reason: ")
-    elif choice == "8":
+    if update_choice == "1":
+        emp["name"] = input("Update name: ")
+    
+    elif update_choice == "2":
+        emp["department"] = input("Update department: ")
+    
+    elif update_choice == "3":
+        emp["date_of_birth"] = input("Update date of birth (YYYY-MM-DD): ")
+    
+    elif update_choice == "4":
+        emp["join_date"] = input("Update join date (YYYY-MM-DD): ")
+    
+    elif update_choice == "5":
+        updated_status = input("Update status (working/retired): ").strip().lower()
+        if updated_status not in ["working", "retired"]:
+            print("Invalid status. Status should be either 'working' or 'retired'.\n")
+            return  
+        emp["status"] = updated_status
+        if updated_status == "retired":
+            retire_employee(emp_id)
+    
+    elif update_choice == "6":
+        emp["exit_date"] = input("Update exit date (YYYY-MM-DD): ")
+    
+    elif update_choice == "7":
+        emp["exit_reason"] = input("Update exit reason: ")
+    
+    elif update_choice == "8":
         print("Update cancelled.\n")
         return
+    
     else:
         print("Invalid choice.\n")
         return
 
     print(f"Employee {emp_id} updated successfully!\n")
+
+def retire_employee(emp_id):
+    """
+    Retire an employee by updating their status and exit date
+    """
+    emp = employees[emp_id]
+    exit_date = input("Exit date (YYYY-MM-DD): ")
+    exit_reason = input("Exit reason: ")
+    emp["exit_date"] = exit_date
+    emp["exit_reason"] = exit_reason
+    
+    print(f"Employee {emp_id} has been retired successfully!\n")
+   
 
 def save_employee_data_to_excel():
     """
@@ -215,27 +242,27 @@ while True:
     ''')
 
     try:
-        choice = int(input("Enter the Menu of your choice: "))
+        choice = input("Enter the Menu of your choice: ")
     except ValueError:
         print("Invalid input! Please enter a number: ")
         continue
 
-    if choice == 1:
+    if choice == "1":
         add_employee()
 
-    elif choice == 2:
+    elif choice == "2":
         update_employee()
 
-    elif choice == 3:
+    elif choice == "3":
          view_employee()
 
-    elif choice == 4:
+    elif choice == "4":
         view_all_employees()
 
-    elif choice == 5:
+    elif choice == "5":
         save_employee_data_to_excel()
 
-    elif choice == 6:
+    elif choice == "6":
         print("\nExiting...\nThank you for using our EMS.\n")
         break
 
