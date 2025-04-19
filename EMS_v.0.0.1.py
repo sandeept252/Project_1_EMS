@@ -87,6 +87,18 @@ def view_all_employees():
     for emp_id, emp in employees.items():
         print(f"{emp_id:<8} {emp['name']:<15} {emp['date_of_birth']:<10} {emp['department']:<12} {emp['join_date']:<10} {emp['status']:<12} {emp['exit_date']:<10} {emp['exit_reason']:<20}")
 
+def ask_for_date(prompt):
+    """
+    Helper function to ask for a date input and return it in YYYY-MM-DD format
+    """
+    while True:
+        date_str = input(prompt)
+        try:
+            date_obj = datetime.strptime(date_str, "%Y-%m-%d").date()
+            return date_obj
+        except ValueError:
+            print("Invalid date format. Please use YYYY-MM-DD.\n")
+
 def add_employee():
     """
     Add employee data. Data of one employee can be input at a time.
@@ -95,8 +107,8 @@ def add_employee():
     emp_id = input("Employee ID: ")
     name = input("Name: ")
     department = input("Department: ")
-    dob = input("Date of Birth (YYYY-MM-DD): ")
-    join_date = input("Join Date (YYYY-MM-DD): ")
+    dob = ask_for_date("Date of Birth (YYYY-MM-DD): ")    
+    join_date = ask_for_date("Join Date (YYYY-MM-DD): ")
     employees[emp_id] = {"emp_id": emp_id, 
                          "name": name, 
                          "date_of_birth": dob, 
@@ -158,7 +170,7 @@ def update_employee():
             retire_employee(emp_id)
     
     elif update_choice == "6":
-        emp["exit_date"] = input("Update exit date (YYYY-MM-DD): ")
+        emp["exit_date"] = ask_for_date("Update exit date (YYYY-MM-DD): ")
     
     elif update_choice == "7":
         emp["exit_reason"] = input("Update exit reason: ")
