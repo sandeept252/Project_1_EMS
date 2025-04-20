@@ -23,7 +23,7 @@ import os
 import pandas as pd
 from datetime import datetime
 
-# Employee class to manage employee information module
+# Employee class to store employee information
 class Employee:
     def __init__(self, emp_id, name, dob, join_date, department, level, designation, status="working", exit_date=None, exit_reason=None):
         '''
@@ -38,6 +38,7 @@ class Employee:
         designation (str): Designation of the employee.
         status (str): Employment status, default is "working".
         exit_date (str): Exit date in 'YYYY-MM-DD' format, default is None.
+        exit_reason (str): Reason for exit, default is None.
         '''
         
         self.emp_id = emp_id
@@ -93,3 +94,42 @@ class Employee:
         if self.status == "retired":
             info += f"\nExit Date: {self.exit_date}\nExit Reason: {self.exit_reason}"
         return info
+
+# Employee Manager class to manage employee database
+class EmployeeManager:
+    def __init__(self, db_file="employees.xlsx"):
+        '''
+        Constructor method to initialize employee manager.
+        Parameters:
+        db_file (str): Path to the database file, default is "employee_db.csv".
+        '''
+        
+        self.db_file = db_file
+        self.employees = self.load_employees()
+
+    def load_employees(self):
+        '''
+        Method to load employees from the database file.
+        Returns:
+        list: List of Employee objects.
+        '''
+        print("Loading employees from database...\n")
+        file_path = input("Path to the employee database file (or press ENTER to skip): ").strip()
+        
+        if file_path == "":
+            print("No file loaded. Starting fresh.\n")
+            return
+    
+        if not os.path.exists(file_path):
+            print("File not found. Starting fresh.\n")
+            return
+
+        if os.path.exists(self.db_file):
+            df = pd.read_excel(self.db_file)
+            employees = {}
+            for _, row in df.iterrows():
+                emp = Employee(row['emp_id'], row['name'], row['dob'], row['join_date'], row['department'], row['level'], row['designation'], row['status'], row['exit_date'], row['exit_reason'])
+                employees.append(emp)
+            return employees
+        else:
+            return []
