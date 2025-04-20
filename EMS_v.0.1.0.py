@@ -71,16 +71,16 @@ class Employee:
         dict: Dictionary representation of employee object.
         '''
         return {
-            "emp_id": self.emp_id,
-            "name": self.name,
-            "dob": self.dob,
-            "join_date": self.join_date,
-            "department": self.department,
-            "level": self.level,
-            "designation": self.designation,
-            "status": self.status,
-            "exit_date": self.exit_date,
-            "exit_reason": self.exit_reason
+            "EMP ID": self.emp_id,
+            "Name": self.name,
+            "Date of Birth": self.dob,
+            "Joim Date": self.join_date,
+            "Department": self.department,
+            "Level": self.level,
+            "Designation": self.designation,
+            "Status": self.status,
+            "Exit Date": self.exit_date,
+            "Exit Reason": self.exit_reason
         }
 
     def display_info(self):
@@ -97,39 +97,118 @@ class Employee:
 
 # Employee Manager class to manage employee database
 class EmployeeManager:
-    def __init__(self, db_file="employees.xlsx"):
+    def __init__(self):
         '''
         Constructor method to initialize employee manager.
         Parameters:
         db_file (str): Path to the database file, default is "employee_db.csv".
         '''
-        
-        self.db_file = db_file
-        self.employees = self.load_employees()
+        self.employees = {}
 
-    def load_employees(self):
+    def ask_for_date(self, prompt):
         '''
-        Method to load employees from the database file.
-        Returns:
-        list: List of Employee objects.
+        Helper method to ask for a date input and return it in YYYY-MM-DD format
         '''
-        print("Loading employees from database...\n")
-        file_path = input("Path to the employee database file (or press ENTER to skip): ").strip()
+        while True:
+            date_str = input(prompt)
+            try:
+                return datetime.strptime(date_str, "%Y-%m-%d").date()
+            except ValueError:
+                print("Invalid date format. Please use YYYY-MM-DD.")
+
+    # def load_from_excel(self):
+    #     '''
+    #     Method to load employees from the database file.
+    #     Returns:
+    #     list: List of Employee objects.
+    #     '''
+    #     print("Loading employees from database...\n")
+    #     file_path = input("Path to the employee database file (or press ENTER to skip): ").strip()
         
-        if file_path == "":
-            print("No file loaded. Starting fresh.\n")
-            return
+    #     if file_path == "":
+    #         print("No file loaded. Starting fresh.\n")
+    #         return
     
-        if not os.path.exists(file_path):
-            print("File not found. Starting fresh.\n")
-            return
+    #     if not os.path.exists(file_path):
+    #         print("File not found. Starting fresh.\n")
+    #         return
 
-        if os.path.exists(self.db_file):
-            df = pd.read_excel(self.db_file)
-            employees = {}
-            for _, row in df.iterrows():
-                emp = Employee(row['emp_id'], row['name'], row['dob'], row['join_date'], row['department'], row['level'], row['designation'], row['status'], row['exit_date'], row['exit_reason'])
-                employees.append(emp)
-            return employees
-        else:
-            return []
+    #     df = pd.read_excel(file_path)
+    #     for _, row in df.iterrows():
+    #         emp = Employee(
+    #             str(row['ID']),
+    #             row['Name'],
+    #             pd.to_datetime(row['Date of Birth']).date(),
+    #             pd.to_datetime(row['Join Date']).date(),
+    #             row['Department'],
+    #             row['Level'],
+    #             row['Designation'],
+    #             row['Status'],
+    #             row['Exit Date:'],
+    #             row['Exit Reason: ']
+    #         )
+    #         self.employees[emp.emp_id] = emp
+    #     print(f"\nLoaded {len(self.employees)} entries.\n")
+
+    def add_employee(self):
+        print("Adding new employee...\n")
+        emp_id = input("Employee ID: ")
+        name = input("Name: ")
+        dob = self.ask_for_date("Date of Birth (YYYY-MM-DD): ")    
+        join_date = self.ask_for_date("Join Date (YYYY-MM-DD): ")
+        department = input("Department: ")
+        level = input("Level: ")
+        designation = input("Designation: ")
+        emp = Employee(emp_id, name, dob, join_date, department, level, designation)
+        self.employees[emp_id] = emp
+        print(f"Employee {emp_id} successfully added!\n")
+
+
+
+
+
+
+# Main Program
+print("=" * 20, "EMPLOYEE MANAGEMENT SYSTEM (PYTHON CLI VERSION 0.0.1)", "="*20)
+
+manager = EmployeeManager()
+#
+
+while True:
+    # Menu
+    print('''Menu:
+        1. Add new employee in the database
+        2. Update existing employee data 
+        3. View an Employee
+        4. View all Employees
+        5. Save
+        6. Exit
+    ''')
+
+    try:
+        choice = input("Enter the Menu of your choice: ")
+    except ValueError:
+        print("Invalid input! Please enter a number: ")
+        continue
+
+    if choice == "1":
+        manager.add_employee()
+
+    # elif choice == "2":
+    #     manager.update_employee()
+
+    # elif choice == "3":
+    #     manager.view_employee()
+
+    # elif choice == "4":
+    #     manager.view_all_employees()
+
+    # elif choice == "5":
+    #     manager.save_employee_data_to_excel()
+
+    elif choice == "6":
+        print("\nExiting...\nThank you for using our EMS.\n")
+        break
+
+    else:
+        print("Invalid Choice. Try Again!\n")
